@@ -46,7 +46,11 @@ export default function ViewPokemon({ params: { id } }: any) {
 
   console.log("🚀 ~ file: page.tsx:9 ~ ViewPokemon ~ data:", data);
   return (
-    <div className="h-screen flex flex-row  w-full bg-green-800">
+    <div
+      className={`h-screen flex flex-row  w-full  ${checkTypes(
+        types?.length >= 0 && types[0]?.type?.name
+      )}`}
+    >
       <div className="basis-2/6  flex flex-col p-10">
         <div className="text-8xl font-black text-white drop-shadow-2xl">
           {name?.toUpperCase()}
@@ -59,7 +63,7 @@ export default function ViewPokemon({ params: { id } }: any) {
                   <div
                     className={` ${checkTypes(
                       types?.length >= 0 && types[0]?.type?.name
-                    )} rounded-full h-full text-black p-2 shadow-lg flex flex-row gap-2`}
+                    )} rounded-full h-full  p-2 shadow-lg flex flex-row gap-2 border-2 text-white`}
                     style={{ width: `${base_stat}%` }}
                   >
                     {/* <RiIcons.RiSwordFill className="text-4xl " />{" "} */}
@@ -75,7 +79,7 @@ export default function ViewPokemon({ params: { id } }: any) {
       <div className="basis-2/6 ">
         <PokemonImage {...data} />
       </div>
-      <div className="basis-2/6 border">asdasd</div>
+      <div className="basis-2/6 "></div>
     </div>
   );
   // <div className="h-screen flex flex-row w-full bg-red-200">
