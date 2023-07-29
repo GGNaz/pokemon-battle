@@ -26,26 +26,27 @@ module.exports = {
         // fire: "#EBA4A2",
         // water: "#D2DAE5",
         // electric: "#F4EFB2",
+
         grass: "#A6C88C",
-        normal: "#D9D9D9",
-        flying: "#FBF4CA",
-        poison: "#A899B6",
-        ground: "#B6ACAB",
-        rock: "#4B485D",
-        bug: "#AFB0B4",
-        ghost: "#A9A3BD",
-        steel: "#8697AB",
-        fire: "#EBA4A2",
-        water: "#D2DAE5",
-        electric: "#F4EFB2",
-        // fighting: ""
-        // psychic:
-        // ice:
-        // dragon:
-        // dark:
-        // fairy:
-        // unknown:
-        // shadow:
+        normal: "#C6C6A7",
+        flying: "#C6B7F5",
+        poison: "#C183C1",
+        ground: "#EBD69D",
+        rock: "#D1C17D",
+        bug: "#C6D16E",
+        ghost: "#A292BC",
+        steel: "#D1D1E0",
+        fire: "#F5AC78",
+        water: "#9DB7F5",
+        electric: "#FAE078",
+        fighting: "#D67873",
+        psychic: "#FA92B2",
+        ice: "#BCE6E6",
+        dragon: "#A27DFA",
+        dark: "#A29288",
+        fairy: "#F4BDC9",
+        unknown: "#292929",
+        shadow: "",
       },
     },
   },

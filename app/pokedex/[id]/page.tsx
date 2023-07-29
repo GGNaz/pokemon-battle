@@ -52,34 +52,45 @@ export default function ViewPokemon({ params: { id } }: any) {
       )}`}
     >
       <div className="basis-2/6  flex flex-col p-10">
-        <div className="text-8xl font-black text-white drop-shadow-2xl">
+        <div className="text-8xl font-black text-white/90 drop-shadow-2xl">
           {name?.toUpperCase()}
         </div>
-        <div className=" text-md flex flex-col gap-5 pt-10 max-w-sm">
-          {stats?.map(({ base_stat, stat }: any, index: number) => {
-            return (
-              <div className="grid grid-cols-12 " key={index}>
-                <div className="col-span-12 bg-gray-200 w-full rounded-full">
-                  <div
-                    className={` ${checkTypes(
-                      types?.length >= 0 && types[0]?.type?.name
-                    )} rounded-full h-full  p-2 shadow-lg flex flex-row gap-2 border-2 text-white`}
-                    style={{ width: `${base_stat}%` }}
-                  >
-                    {/* <RiIcons.RiSwordFill className="text-4xl " />{" "} */}
+        <div className="flex flex-col gap-2">
+          <div className="font-semibold text-3xl text-white">Base Stats</div>
+          <div className=" text-md flex flex-col gap-3  max-w-sm">
+            {stats?.map(({ base_stat, stat }: any, index: number) => {
+              return (
+                <div className="grid grid-cols-12 gap-2" key={index}>
+                  <div className="col-span-3 text-gray-600 font-medium">
+                    {" "}
                     {checkStats(stat)?.toUpperCase()}
                   </div>
-                  {/* <div className="text-right">123</div> */}
+
+                  <div className="col-span-6 bg-gray-200 w-full rounded-full">
+                    <div
+                      className={` ${checkTypes(
+                        types?.length >= 0 && types[0]?.type?.name
+                      )} rounded-full h-full px-2 shadow-lg flex flex-row gap-2 border-2 text-white`}
+                      style={{ width: `${base_stat / 2}%` }}
+                    >
+                      {/* <RiIcons.RiSwordFill className="text-4xl " />{" "} */}
+                    </div>
+
+                    {/* <div className="text-right">123</div> */}
+                  </div>
+                  <div className="col-span-3 text-gray-700 text-sm">
+                    {base_stat}/250
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
-      <div className="basis-2/6 ">
+      <div className="basis-2/6">
         <PokemonImage {...data} />
       </div>
-      <div className="basis-2/6 "></div>
+      <div className="basis-2/6 p-10">sdasd</div>
     </div>
   );
   // <div className="h-screen flex flex-row w-full bg-red-200">

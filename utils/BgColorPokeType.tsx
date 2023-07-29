@@ -1,5 +1,22 @@
+import bug from "@/assets/types/bug.svg";
+import dark from "@/assets/types/dark.svg";
+import dragon from "@/assets/types/dragon.svg";
+import electric from "@/assets/types/electric.svg";
+import fairy from "@/assets/types/fairy.svg";
+import fire from "@/assets/types/fire.svg";
+import flying from "@/assets/types/flying.svg";
+import ghost from "@/assets/types/ghost.svg";
+import grass from "@/assets/types/grass.svg";
+import ground from "@/assets/types/ground.svg";
+import ice from "@/assets/types/ice.svg";
+import normal from "@/assets/types/normal.svg";
+import poison from "@/assets/types/poison.svg";
+import psychic from "@/assets/types/psychic.svg";
+import rock from "@/assets/types/rock.svg";
+import steel from "@/assets/types/steel.svg";
+import water from "@/assets/types/water.svg";
+import fighting from "@/assets/types/fighting.svg";
 export const checkTypes = (type: string) => {
-  console.log("🚀 ~ file: BgColorPokeType.tsx:2 ~ checkTypes ~ type:", type);
   switch (type) {
     case "grass":
       return "bg-grass";
@@ -25,6 +42,20 @@ export const checkTypes = (type: string) => {
       return "bg-water";
     case "electric":
       return "bg-electric";
+    case "fighting":
+      return "bg-fighting";
+    case "psychic":
+      return "bg-psychic";
+    case "ice":
+      return "bg-ice";
+    case "dragon":
+      return "bg-dragon";
+    case "dark":
+      return "bg-dark";
+    case "fairy":
+      return "bg-fairy";
+    case "unknown":
+      return "bg-unknown";
   }
 };
 
@@ -71,5 +102,48 @@ export const checkStats = ({ name }: any) => {
       return "S-DEF";
     case "speed":
       return "SPD";
+  }
+};
+
+export const checkIconType = (type: any) => {
+  switch (type) {
+    case "grass":
+      return grass;
+    case "normal":
+      return normal;
+    case "flying":
+      return flying;
+    case "poison":
+      return poison;
+    case "ground":
+      return ground;
+    case "rock":
+      return rock;
+    case "bug":
+      return bug;
+    case "ghost":
+      return ghost;
+    case "steel":
+      return steel;
+    case "fire":
+      return fire;
+    case "water":
+      return water;
+    case "electric":
+      return electric;
+    case "fighting":
+      return fighting;
+    case "psychic":
+      return psychic;
+    case "ice":
+      return ice;
+    case "dragon":
+      return dragon;
+    case "dark":
+      return dark;
+    case "fairy":
+      return fairy;
+    // case "unknown":
+    //   return unknown
   }
 };
