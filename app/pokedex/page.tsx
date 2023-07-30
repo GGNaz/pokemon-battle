@@ -1,18 +1,21 @@
 "use client";
 import useSWR from "swr";
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import * as MdIcons from "react-icons/md";
 // import { checkTypes } from "@/utils/BgColorPokeType";
 import Link from "next/link";
 import Image from "next/image";
 import { checkIconType, checkStats, checkTypes } from "@/utils/BgColorPokeType";
 import HOCLoading from "@/component/HOCLoading";
+import { useRouter } from "next/navigation";
+import { withRouter } from "next/router";
 const fetcher = (url: string) =>
   fetch(url, { next: { revalidate: 60 } }).then((res) => res.json());
 
 interface CardProps {
   name: string;
   url: string;
+  setShowLoading: any;
 }
 
 interface SeletedTabProps {
@@ -20,7 +23,7 @@ interface SeletedTabProps {
   showLabel?: string;
 }
 
-const Card = ({ name, url }: CardProps) => {
+const Card = ({ name, url, setShowLoading }: CardProps) => {
   console.log("🚀 ~ file: page.tsx:21 ~ Card ~ url:", url);
   const { data, error, isLoading } = useSWR(url, fetcher);
   console.log("🚀 ~ file: page.tsx:25 ~ Card ~ data:", data);
@@ -98,6 +101,7 @@ const Card = ({ name, url }: CardProps) => {
               className="h-40 w-40 z-20 -mb-4 transition-all duration-300 hover:scale-125 hover:z-40 drop-shadow-2xl"
               height={500}
               width={500}
+              onClick={() => setShowLoading(true)}
             />
           ) : (
             <div className="h-40 w-40">
@@ -184,27 +188,33 @@ const Card = ({ name, url }: CardProps) => {
   );
 };
 
-export default function Pokedex() {
+const Pokedex = () => {
+  const router = useRouter();
+  console.log("🚀 ~ file: page.tsx:192 ~ Pokedex ~ router:", router);
+
   const { data, error, isLoading } = useSWR(
     "https://pokeapi.co/api/v2/pokemon/?limit=200",
     fetcher
   );
+  const [showLoading, setShowLoading] = useState(false);
   console.log("🚀 ~ file: page.tsx:9 ~ Pokedex ~ data:", data);
 
   return (
     <div className="h-full w-full flex justify-center bg-slate-100 py-5">
-      {/* {isLoading && (
-        <div className="bg-red-700 absolute top-0 left-0 h-full w-full z-50">
+      {showLoading && (
+        <div className="bg-red-700 fixed top-0 left-0 flex justify-center items-center h-screen w-full z-50">
           <HOCLoading />
         </div>
-      )} */}
+      )}
       <div className=" w-full h-full max-w-7xl">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
           {data?.results?.map((data: CardProps) => (
-            <Card {...data} />
+            <Card {...data} setShowLoading={setShowLoading} />
           ))}
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Pokedex;
