@@ -92,7 +92,7 @@ export default function Home() {
       );
       setFileredPoke(findAll);
     }
-  }, [search]);
+  }, [search, data?.results]);
 
   console.log("🚀 ~ file: page.tsx:79 ~ Home ~ data:", data);
   return (
