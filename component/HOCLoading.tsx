@@ -5,7 +5,7 @@ export default function HOCLoading() {
   return (
     <Lottie
       animationData={loadingAnimation}
-      loop={true}
+      loop={false}
       className="h-20 w-20"
     />
   );

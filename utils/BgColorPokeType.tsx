@@ -59,6 +59,49 @@ export const checkTypes = (type: string) => {
   }
 };
 
+export const checkTextTypes = (type: string) => {
+  switch (type) {
+    case "grass":
+      return "grass";
+    case "normal":
+      return "normal";
+    case "flying":
+      return "flying";
+    case "poison":
+      return "poison";
+    case "ground":
+      return "ground";
+    case "rock":
+      return "rock";
+    case "bug":
+      return "bug";
+    case "ghost":
+      return "ghost";
+    case "steel":
+      return "steel";
+    case "fire":
+      return "fire";
+    case "water":
+      return "water";
+    case "electric":
+      return "electric";
+    case "fighting":
+      return "fighting";
+    case "psychic":
+      return "psychic";
+    case "ice":
+      return "ice";
+    case "dragon":
+      return "dragon";
+    case "dark":
+      return "dark";
+    case "fairy":
+      return "fairy";
+    case "unknown":
+      return "unknown";
+  }
+};
+
 export const backgroundColor = (type: string) => {
   switch (type) {
     case "grass":

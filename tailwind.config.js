@@ -38,7 +38,7 @@ module.exports = {
         steel: "#D1D1E0",
         fire: "#F5AC78",
         water: "#9DB7F5",
-        electric: "#FAE078",
+        electric: "#E1C96C",
         fighting: "#D67873",
         psychic: "#FA92B2",
         ice: "#BCE6E6",
@@ -47,6 +47,8 @@ module.exports = {
         fairy: "#F4BDC9",
         unknown: "#292929",
         shadow: "",
+
+        // FAE078
       },
     },
   },

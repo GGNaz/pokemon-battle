@@ -1,21 +1,34 @@
 "use client";
 import useSWR from "swr";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
+import Lottie from "lottie-react";
 import * as MdIcons from "react-icons/md";
+import * as BsIcon from "react-icons/bs";
 // import { checkTypes } from "@/utils/BgColorPokeType";
 import Link from "next/link";
 import Image from "next/image";
-import { checkIconType, checkStats, checkTypes } from "@/utils/BgColorPokeType";
+import {
+  checkIconType,
+  checkStats,
+  checkTextTypes,
+  checkTypes,
+} from "@/utils/BgColorPokeType";
 import HOCLoading from "@/component/HOCLoading";
-import { useRouter } from "next/navigation";
-import { withRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
+import * as Io5icons from "react-icons/io5";
+import emptySearch from "@/assets/loading/emptysearch.json";
 const fetcher = (url: string) =>
   fetch(url, { next: { revalidate: 60 } }).then((res) => res.json());
 
 interface CardProps {
   name: string;
   url: string;
-  setShowLoading: any;
+  setShowLoading?: any;
+}
+
+interface PokeTypeProps {
+  slot: 1;
+  pokemon: CardProps;
 }
 
 interface SeletedTabProps {
@@ -41,11 +54,18 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
     });
   };
   const pokeTypeName = types?.length >= 0 && types[0]?.type?.name;
-
+  // const isGradient =
+  //   types?.length >= 2
+  //     ? "bg-gradient-to-r from-" +
+  //       `[${types[0]?.type?.name?.toLocaleString()}]` +
+  //       " to-" +
+  //       `[${types[1]?.type?.name?.toLocaleString()}]`
+  //     : "";
+  // console.log("🚀 ~ file: page.tsx:50 ~ Card ~ isGradient:", isGradient);
   return (
     <div
       key={name}
-      className={` relative shadow-lg  flex rounded-xl  overflow-hidden  cursor-pointer ${checkTypes(
+      className={` relative shadow-lg   flex rounded-xl  overflow-hidden  cursor-pointer ${checkTypes(
         pokeTypeName
       )}`}
     >
@@ -69,8 +89,9 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
               //     </div>
               //   </div>
               // </div>
+
               <div
-                className={`flex flex-row gap-1  justify-center items-center ${checkTypes(
+                className={`flex flex-row gap-1  justify-center items-center  ${checkTypes(
                   type?.name
                 )} rounded-full border p-1`}
                 key={index}
@@ -104,7 +125,7 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
               onClick={() => setShowLoading(true)}
             />
           ) : (
-            <div className="h-40 w-40">
+            <div className="h-40 w-40 -mb-4 z-20 flex justify-center items-center">
               <HOCLoading />
             </div>
           )}
@@ -189,28 +210,165 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
 };
 
 const Pokedex = () => {
-  const router = useRouter();
-  console.log("🚀 ~ file: page.tsx:192 ~ Pokedex ~ router:", router);
-
+  const [searchPoke, setSearchPoke] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const searchParams = useSearchParams();
+  const query = searchParams.get("search");
+  const [filteredPoke, setFilteredPoke] = useState([]);
+  console.log(
+    "🚀 ~ file: page.tsx:211 ~ Pokedex ~ filteredPoke:",
+    filteredPoke
+  );
   const { data, error, isLoading } = useSWR(
-    "https://pokeapi.co/api/v2/pokemon/?limit=200",
+    `https://pokeapi.co/api/v2/type/${query}`,
     fetcher
   );
   const [showLoading, setShowLoading] = useState(false);
-  console.log("🚀 ~ file: page.tsx:9 ~ Pokedex ~ data:", data);
+  console.log("🚀 ~ file: page.tsx:9 ~ Pokedex ~ data:", data?.pokemon);
+  useEffect(() => {
+    if (searchPoke && searchPoke !== "") {
+      const findAll = data?.pokemon?.filter((data: PokeTypeProps) =>
+        data.pokemon?.name.includes(searchPoke)
+      );
+      setFilteredPoke(findAll);
+    } else {
+      setFilteredPoke(data?.pokemon);
+    }
+  }, [searchPoke, data]);
+
+  const itemsPerPage = 8;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredPoke?.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const pageNumbers: number[] = [];
+  for (let i = 1; i <= Math.ceil(filteredPoke?.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  // const getPageRange = () => {
+  //   const maxPage = Math.ceil(data?.pokemon?.length / itemsPerPage);
+  //   const middlePage = Math.ceil(itemsPerPage / 2);
+
+  //   if (currentPage <= middlePage) {
+  //     return pageNumbers.slice(0, itemsPerPage);
+  //   } else if (currentPage > maxPage - middlePage) {
+  //     return pageNumbers.slice(maxPage - itemsPerPage);
+  //   } else {
+  //     return pageNumbers.slice(
+  //       currentPage - middlePage - 1,
+  //       currentPage + middlePage
+  //     );
+  //   }
+  // };
 
   return (
-    <div className="h-full w-full flex justify-center bg-slate-100 py-5">
+    <div className="h-full w-full flex justify-center ">
       {showLoading && (
         <div className="bg-red-700 fixed top-0 left-0 flex justify-center items-center h-screen w-full z-50">
           <HOCLoading />
         </div>
       )}
-      <div className=" w-full h-full max-w-7xl">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-          {data?.results?.map((data: CardProps) => (
-            <Card {...data} setShowLoading={setShowLoading} />
-          ))}
+      <div className=" w-full h-screen max-w-6xl flex flex-col gap-2">
+        <div className=" w-full h-full flex flex-row gap-4  items-center justify-center">
+          {filteredPoke?.length > 0 && (
+            <button
+              onClick={() =>
+                currentPage > 1 && handlePageChange(currentPage - 1)
+              }
+              className={`${checkTypes(
+                query ?? "default"
+              )} drop-shadow-2xl rounded-l-full h-40 p-2  text-white hover:text-gray-500`}
+            >
+              <Io5icons.IoChevronBack className="text-2xl " />
+            </button>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
+            <div className="col-span-4 ">
+              <Link
+                className={`flex flex-row gap-2 p-2 text-white rounded-lg items-center w-fit text-sm hover:text-black justify-center ${checkTypes(
+                  query ?? "default"
+                )}`}
+                href={"/home"}
+              >
+                <Io5icons.IoArrowBack />
+                <span>Back to Main Page</span>
+              </Link>
+            </div>
+            <div className="flex flex-row justify-between col-span-4 ">
+              <div className="capitalize font-black text-gray-600 text-4xl ">
+                List of {query} Pokemon
+              </div>
+              <div>
+                <div className="relative">
+                  <BsIcon.BsSearch className="absolute left-3 top-3 text-gray-400" />
+                  <input
+                    type="text"
+                    value={searchPoke}
+                    onChange={(e) => setSearchPoke(e.target.value)}
+                    className="py-2 px-10 focus:outline-none border border-gray-200 rounded-md w-full"
+                    placeholder="Search..."
+                  />
+                </div>
+              </div>
+            </div>
+            {currentItems?.map(({ pokemon }: any) => (
+              <Card {...pokemon} setShowLoading={setShowLoading} />
+            ))}
+            {filteredPoke?.length <= 0 && (
+              <div className="h-[70vh] flex justify-center items-center w-full col-span-5">
+                <div className="flex flex-col gap-3 justify-center items-center">
+                  <Lottie animationData={emptySearch} loop={false} />
+                  <div className="text-xl text-gray-400 font-medium">
+                    No pokemon found.
+                  </div>
+                </div>
+              </div>
+            )}
+            {isLoading && (
+              <div className="h-[40vh] justify-center items-center w-full col-span-4">
+                Fetching Pokemon, please wait...
+              </div>
+            )}
+            <div className="col-span-4 flex justify-center items-center gap-2">
+              {filteredPoke?.length > 0 &&
+                pageNumbers.map((data) => (
+                  <button
+                    className={`
+                   ${
+                     currentPage === data
+                       ? `text-white transition-all duration-150  scale-105 font-bold ${checkTypes(
+                           query ?? "default"
+                         )}`
+                       : "hover:font-semibold"
+                   }
+                   p-2 rounded-full w-8 h-8 text-xs `}
+                    onClick={() => handlePageChange(data)}
+                    key={data}
+                  >
+                    {data}
+                  </button>
+                ))}
+            </div>
+          </div>
+          {filteredPoke?.length > 0 && (
+            <button
+              onClick={() =>
+                currentPage < pageNumbers.length &&
+                handlePageChange(currentPage + 1)
+              }
+              className={`${checkTypes(
+                query ?? "default"
+              )} drop-shadow-2xl rounded-r-full h-40 p-2  text-white hover:text-gray-500`}
+            >
+              <Io5icons.IoChevronForward className="text-2xl " />
+            </button>
+          )}
         </div>
       </div>
     </div>
