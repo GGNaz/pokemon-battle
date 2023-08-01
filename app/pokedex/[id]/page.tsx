@@ -89,6 +89,31 @@ export default function ViewPokemon({ params: { id } }: any) {
           </div>
           <div className="w-full flex flex-col gap-3 rounded-t-3xl p-5 md:p-0 bg-white md:bg-transparent">
             <div className="text-xl text-gray-600 md:text-white font-semibold">
+              TYPE
+            </div>
+            <div className="flex flex-row gap-2 w-full">
+              {types?.map((data: PokeTypeProps) => {
+                return (
+                  <div
+                    key={data.slot}
+                    className={`${checkTypes(
+                      data?.type?.name
+                    )}  border-2 rounded-full  flex flex-row gap-3 capitalize justify-center items-center text-white px-3 py-1`}
+                  >
+                    {" "}
+                    <Image
+                      src={checkIconType(data?.type?.name)}
+                      alt={data?.type?.name}
+                      height={100}
+                      width={100}
+                      className={`h-5 w-5  `}
+                    />
+                    <span>{data?.type?.name}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="text-xl text-gray-600 md:text-white font-semibold">
               BASE STAT
             </div>
             <div className=" text-md flex flex-col gap-3  ">
@@ -111,31 +136,6 @@ export default function ViewPokemon({ params: { id } }: any) {
                     <div className="col-span-3 text-gray-700 text-sm">
                       {base_stat}/250
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="text-xl text-gray-600 md:text-white font-semibold">
-              TYPE
-            </div>
-            <div className="flex flex-row gap-2 w-full">
-              {types?.map((data: PokeTypeProps) => {
-                return (
-                  <div
-                    key={data.slot}
-                    className={`${checkTypes(
-                      data?.type?.name
-                    )}  border-2 rounded-full  flex flex-row gap-3 capitalize justify-center items-center text-white px-3 py-1`}
-                  >
-                    {" "}
-                    <Image
-                      src={checkIconType(data?.type?.name)}
-                      alt={data?.type?.name}
-                      height={100}
-                      width={100}
-                      className={`h-5 w-5  `}
-                    />
-                    <span>{data?.type?.name}</span>
                   </div>
                 );
               })}
