@@ -1,8 +1,10 @@
 "use client";
 import { checkIconType, checkStats, checkTypes } from "@/utils/BgColorPokeType";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { ReactNode } from "react";
+import * as RiIcons from "react-icons/ri";
 import useSWR from "swr";
 import * as Io5icons from "react-icons/io5";
 import HOCLoading from "@/component/HOCLoading";

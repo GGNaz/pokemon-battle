@@ -1,13 +1,18 @@
 "use client";
 import useSWR from "swr";
-import React, { useState, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
 import Lottie from "lottie-react";
 import * as MdIcons from "react-icons/md";
 import * as BsIcon from "react-icons/bs";
-
+// import { checkTypes } from "@/utils/BgColorPokeType";
 import Link from "next/link";
 import Image from "next/image";
-import { checkIconType, checkTypes } from "@/utils/BgColorPokeType";
+import {
+  checkIconType,
+  checkStats,
+  checkTextTypes,
+  checkTypes,
+} from "@/utils/BgColorPokeType";
 import HOCLoading from "@/component/HOCLoading";
 import { useSearchParams } from "next/navigation";
 import * as Io5icons from "react-icons/io5";
@@ -205,7 +210,7 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
 };
 
 const Pokedex = () => {
-  const [windowWidth, setWindowWidth] = useState(window?.innerWidth);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   console.log("🚀 ~ file: page.tsx:214 ~ Pokedex ~ windowWidth:", windowWidth);
   const [searchPoke, setSearchPoke] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
