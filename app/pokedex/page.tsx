@@ -65,7 +65,7 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
   return (
     <div
       key={name}
-      className={` relative shadow-lg   flex rounded-xl  overflow-hidden  cursor-pointer ${checkTypes(
+      className={` relative shadow-lg   flex rounded-xl  overflow-hidden w-full  cursor-pointer ${checkTypes(
         pokeTypeName
       )}`}
     >
@@ -210,6 +210,8 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
 };
 
 const Pokedex = () => {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  console.log("🚀 ~ file: page.tsx:214 ~ Pokedex ~ windowWidth:", windowWidth);
   const [searchPoke, setSearchPoke] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const searchParams = useSearchParams();
@@ -235,8 +237,25 @@ const Pokedex = () => {
       setFilteredPoke(data?.pokemon);
     }
   }, [searchPoke, data]);
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
 
-  const itemsPerPage = 8;
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const checkWindowSize = (size: number) => {
+    if (size <= 782) return 2;
+    else if (size >= 783 && size <= 1018) return 4;
+    else return 8;
+  };
+
+  const itemsPerPage = checkWindowSize(windowWidth);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -251,21 +270,21 @@ const Pokedex = () => {
     pageNumbers.push(i);
   }
 
-  // const getPageRange = () => {
-  //   const maxPage = Math.ceil(data?.pokemon?.length / itemsPerPage);
-  //   const middlePage = Math.ceil(itemsPerPage / 2);
+  const getPageRange = () => {
+    const maxPage = Math.ceil(data?.pokemon?.length / 5);
+    const middlePage = Math.ceil(5 / 2);
 
-  //   if (currentPage <= middlePage) {
-  //     return pageNumbers.slice(0, itemsPerPage);
-  //   } else if (currentPage > maxPage - middlePage) {
-  //     return pageNumbers.slice(maxPage - itemsPerPage);
-  //   } else {
-  //     return pageNumbers.slice(
-  //       currentPage - middlePage - 1,
-  //       currentPage + middlePage
-  //     );
-  //   }
-  // };
+    if (currentPage <= middlePage) {
+      return pageNumbers.slice(0, 5);
+    } else if (currentPage > maxPage - middlePage) {
+      return pageNumbers.slice(maxPage - 5);
+    } else {
+      return pageNumbers.slice(
+        currentPage - middlePage - 1,
+        currentPage + middlePage
+      );
+    }
+  };
 
   return (
     <div className="h-full w-full flex justify-center ">
@@ -274,34 +293,40 @@ const Pokedex = () => {
           <HOCLoading />
         </div>
       )}
-      <div className=" w-full h-screen max-w-6xl flex flex-col gap-2">
-        <div className=" w-full h-full flex flex-row gap-4  items-center justify-center">
-          {filteredPoke?.length > 0 && (
+      <div className=" w-full h-screen max-w-6xl flex flex-col gap-2 p-2 lg:p-0">
+        <div className=" w-full h-full flex flex-row gap-4 items-start lg:items-center justify-start lg:justify-center">
+          {/* {filteredPoke?.length > 0 && ( */}
+          <div
+            className={`flex flex-col h-full justify-center ${
+              filteredPoke?.length > 0 ? "visible" : "invisible"
+            } `}
+          >
             <button
               onClick={() =>
                 currentPage > 1 && handlePageChange(currentPage - 1)
               }
               className={`${checkTypes(
                 query ?? "default"
-              )} drop-shadow-2xl rounded-l-full h-40 p-2  text-white hover:text-gray-500`}
+              )} drop-shadow-2xl rounded-l-full  h-40 p-2  text-white hover:text-gray-500`}
             >
               <Io5icons.IoChevronBack className="text-2xl " />
             </button>
-          )}
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full">
-            <div className="col-span-4 ">
+          </div>
+          {/* )} */}
+          <div className="flex flex-col gap-5 w-full ">
+            <div className="">
               <Link
                 className={`flex flex-row gap-2 p-2 text-white rounded-lg items-center w-fit text-sm hover:text-black justify-center ${checkTypes(
                   query ?? "default"
                 )}`}
-                href={"/home"}
+                href={"/"}
               >
                 <Io5icons.IoArrowBack />
                 <span>Back to Main Page</span>
               </Link>
             </div>
-            <div className="flex flex-row justify-between col-span-4 ">
-              <div className="capitalize font-black text-gray-600 text-4xl ">
+            <div className="flex flex-col md:flex-row justify-start md:justify-between gap-3">
+              <div className="capitalize font-black text-gray-600  text-xl  md:text-4xl ">
                 List of {query} Pokemon
               </div>
               <div>
@@ -317,11 +342,15 @@ const Pokedex = () => {
                 </div>
               </div>
             </div>
-            {currentItems?.map(({ pokemon }: any) => (
-              <Card {...pokemon} setShowLoading={setShowLoading} />
-            ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 ">
+              {currentItems?.map(({ pokemon }: any, index: number) => (
+                <div key={index} className="col-span-1">
+                  <Card {...pokemon} setShowLoading={setShowLoading} />
+                </div>
+              ))}
+            </div>
             {filteredPoke?.length <= 0 && (
-              <div className="h-[70vh] flex justify-center items-center w-full col-span-5">
+              <div className="h-[70vh] flex justify-center items-center w-full ">
                 <div className="flex flex-col gap-3 justify-center items-center">
                   <Lottie animationData={emptySearch} loop={false} />
                   <div className="text-xl text-gray-400 font-medium">
@@ -331,11 +360,11 @@ const Pokedex = () => {
               </div>
             )}
             {isLoading && (
-              <div className="h-[40vh] justify-center items-center w-full col-span-4">
+              <div className="h-[40vh] justify-center items-center w-full ">
                 Fetching Pokemon, please wait...
               </div>
             )}
-            <div className="col-span-4 flex justify-center items-center gap-2">
+            {/* <div className=" flex justify-center items-center gap-2">
               {filteredPoke?.length > 0 &&
                 pageNumbers.map((data) => (
                   <button
@@ -354,9 +383,34 @@ const Pokedex = () => {
                     {data}
                   </button>
                 ))}
+            </div> */}
+            <div className=" flex justify-center items-center gap-2">
+              {getPageRange()?.length > 0 &&
+                getPageRange()?.map((data) => (
+                  <button
+                    className={`
+                   ${
+                     currentPage === data
+                       ? `text-white transition-all duration-150  scale-105 font-bold ${checkTypes(
+                           query ?? "default"
+                         )}`
+                       : "hover:font-semibold"
+                   }
+                   p-2 rounded-full w-8 h-8 text-xs `}
+                    onClick={() => handlePageChange(data)}
+                    key={data}
+                  >
+                    {data}
+                  </button>
+                ))}
             </div>
           </div>
-          {filteredPoke?.length > 0 && (
+          {/* {filteredPoke?.length > 0 && ( */}
+          <div
+            className={`flex flex-col h-full justify-center ${
+              filteredPoke?.length > 0 ? "visible" : "invisible"
+            } `}
+          >
             <button
               onClick={() =>
                 currentPage < pageNumbers.length &&
@@ -368,7 +422,8 @@ const Pokedex = () => {
             >
               <Io5icons.IoChevronForward className="text-2xl " />
             </button>
-          )}
+          </div>
+          {/* )} */}
         </div>
       </div>
     </div>

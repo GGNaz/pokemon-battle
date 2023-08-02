@@ -69,8 +69,8 @@ export default function ViewPokemon({ params: { id } }: any) {
         types?.length >= 0 && types[0]?.type?.name
       )}`}
     >
-      <div className="max-w-6xl w-full flex flex-col gap-10">
-        <div className="flex flex-col  w-fit  px-5 md:px-0">
+      <div className="max-w-6xl w-full flex flex-col gap-10 ">
+        <div className="flex flex-col  w-fit  px-5 ">
           <button
             className={`flex flex-row gap-2 p-2 text-white rounded-lg items-center w-fit text-lg hover:text-black justify-center`}
             onClick={() => router.back()}
@@ -78,7 +78,7 @@ export default function ViewPokemon({ params: { id } }: any) {
             <Io5icons.IoArrowBack />
             <span>Back</span>
           </button>
-          <div className="text-6xl md:text-8xl font-black text-white/90 drop-shadow-2xl">
+          <div className="text-5xl md:text-6xl lg:text-8xl font-black text-white/90 drop-shadow-2xl">
             {name?.toUpperCase()}
           </div>
         </div>
