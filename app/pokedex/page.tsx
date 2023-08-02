@@ -210,7 +210,9 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
 };
 
 const Pokedex = () => {
-  const [windowWidth, setWindowWidth] = useState(window?.innerWidth ?? 0);
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== "undefined" ? window?.innerWidth : 0
+  );
 
   const [searchPoke, setSearchPoke] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -235,16 +237,18 @@ const Pokedex = () => {
     }
   }, [searchPoke, data]);
   useEffect(() => {
-    console.log(window.innerWidth);
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
+    if (typeof window !== "undefined") {
+      console.log(window.innerWidth);
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+      };
 
-    window.addEventListener("resize", handleResize);
+      window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }
   }, []);
 
   const checkWindowSize = (size: number) => {
