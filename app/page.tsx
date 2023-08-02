@@ -11,12 +11,14 @@ import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import React, { useState, useEffect } from "react";
 import * as BsIcon from "react-icons/bs";
+import HOCLoading from "@/component/HOCLoading";
 const fetcher = (url: string) =>
   fetch(url, { next: { revalidate: 60 } }).then((res) => res.json());
 
 export default function Home() {
   const router = useRouter();
   const [search, setSearch] = useState<string>("");
+  const [showLoading, setShowLoading] = useState<boolean>(false);
   const typeList = [
     {
       label: "grass",
@@ -95,9 +97,13 @@ export default function Home() {
     }
   }, [search, data?.results]);
 
-  console.log("🚀 ~ file: page.tsx:79 ~ Home ~ data:", data);
   return (
     <div className="flex justify-start md:justify-center items-start p-4 md:p-0 md:items-center h-screen w-full">
+      {showLoading && (
+        <div className="bg-red-700 fixed top-0 left-0 flex justify-center items-center h-screen w-full z-50">
+          <HOCLoading />
+        </div>
+      )}
       <div className="max-w-3xl  w-full flex flex-col gap-5">
         <div className="text-3xl font-semibold text-gray-500">
           What pokemon are you looking for?
@@ -114,7 +120,10 @@ export default function Home() {
             placeholder="Search pokemon name..."
           />
           {filteredPoke?.length > 0 && search !== "" && search && (
-            <div className="absolute mt-2 max-h-56 h-fit bg-white shadow-xl w-full z-10 rounded-lg overflow-y-scroll divide-y flex flex-col">
+            <div
+              className="absolute mt-2 max-h-56 h-fit bg-white shadow-xl w-full z-10 rounded-lg overflow-y-scroll divide-y flex flex-col"
+              onClick={() => setShowLoading(true)}
+            >
               {filteredPoke?.map(({ name }: CardProps) => (
                 <Link
                   key={name}
@@ -134,31 +143,35 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-4 gap-5 ">
           {typeList?.map(({ label }, index) => (
-            <Link
+            <div
+              onClick={() => setShowLoading(true)}
+              key={index}
               className={`${checkTypes(
                 label
-              )} rounded-2xl relative p-5 col-span-1 shadow-lg overflow-hidden cursor-pointer`}
-              key={index}
-              href={{
-                pathname: "/pokedex",
-                query: {
-                  search: label,
-                },
-              }}
+              )} rounded-2xl h-full w-full relative p-5 col-span-1 shadow-lg overflow-hidden cursor-pointer`}
             >
-              <div className="text-white hidden md:flex">
-                {label?.toUpperCase()}
-              </div>
-              <div className="flex justify-center items-center">
-                <Image
-                  src={checkIconType(label)}
-                  alt={label}
-                  height={400}
-                  width={400}
-                  className=" flex md:absolute h-fit md:h-16 w-16 bottom-0 md:-bottom-3 right-1"
-                />
-              </div>
-            </Link>
+              <Link
+                href={{
+                  pathname: "/pokedex",
+                  query: {
+                    search: label,
+                  },
+                }}
+              >
+                <div className="text-white hidden h-full items-center md:flex">
+                  {label?.toUpperCase()}
+                </div>
+                <div className="flex h-full justify-center items-center">
+                  <Image
+                    src={checkIconType(label)}
+                    alt={label}
+                    height={400}
+                    width={400}
+                    className=" flex md:absolute h-fit md:h-16 w-16 bottom-0 md:-bottom-3 right-1"
+                  />
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
       </div>

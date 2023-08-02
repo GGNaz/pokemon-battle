@@ -37,15 +37,13 @@ interface SeletedTabProps {
 }
 
 const Card = ({ name, url, setShowLoading }: CardProps) => {
-  console.log("🚀 ~ file: page.tsx:21 ~ Card ~ url:", url);
   const { data, error, isLoading } = useSWR(url, fetcher);
-  console.log("🚀 ~ file: page.tsx:25 ~ Card ~ data:", data);
+
   const [selectedTab, setSelectedtab] = useState<SeletedTabProps>({
     showLabel: "info",
   });
 
   const { sprites, height, types, stats, id, abilities, weight } = data ?? {};
-  console.log("🚀 ~ file: page.tsx:30 ~ Card ~ types:", types);
 
   const tabShown = (tabName: string, id: number) => {
     setSelectedtab({
@@ -54,14 +52,7 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
     });
   };
   const pokeTypeName = types?.length >= 0 && types[0]?.type?.name;
-  // const isGradient =
-  //   types?.length >= 2
-  //     ? "bg-gradient-to-r from-" +
-  //       `[${types[0]?.type?.name?.toLocaleString()}]` +
-  //       " to-" +
-  //       `[${types[1]?.type?.name?.toLocaleString()}]`
-  //     : "";
-  // console.log("🚀 ~ file: page.tsx:50 ~ Card ~ isGradient:", isGradient);
+
   return (
     <div
       key={name}
@@ -224,8 +215,8 @@ const Pokedex = () => {
     `https://pokeapi.co/api/v2/type/${query}`,
     fetcher
   );
-  const [showLoading, setShowLoading] = useState(false);
-  console.log("🚀 ~ file: page.tsx:9 ~ Pokedex ~ data:", data?.pokemon);
+  const [showLoading, setShowLoading] = useState<boolean>(false);
+
   useEffect(() => {
     if (searchPoke && searchPoke !== "") {
       const findAll = data?.pokemon?.filter((data: PokeTypeProps) =>
@@ -238,7 +229,6 @@ const Pokedex = () => {
   }, [searchPoke, data]);
   useEffect(() => {
     if (typeof window !== "undefined") {
-      console.log(window.innerWidth);
       const handleResize = () => {
         setWindowWidth(window.innerWidth);
       };

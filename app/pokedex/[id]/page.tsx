@@ -59,10 +59,9 @@ export default function ViewPokemon({ params: { id } }: any) {
     ],
     fetcher
   );
-  console.log("🚀 ~ file: page.tsx:9 ~ AWWWWWWWWWWWWWWWWW ~ data:", data);
+
   const { name, stats, types } = data ?? {};
 
-  console.log("🚀 ~ file: page.tsx:9 ~ ViewPokemon ~ data:", data);
   return (
     <div
       className={`h-full md:h-screen flex justify-center items-center w-full  ${checkTypes(
