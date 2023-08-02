@@ -235,6 +235,7 @@ const Pokedex = () => {
     }
   }, [searchPoke, data]);
   useEffect(() => {
+    console.log(window.innerWidth);
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
