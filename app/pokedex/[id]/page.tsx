@@ -17,13 +17,16 @@ const PokemonImage = (data: any) => {
   //   fetcher
   // );
   const { sprites, types } = data ?? {};
+  console.log("🚀 ~ file: page.tsx:20 ~ PokemonImage ~ sprites:", sprites);
 
   return (
     <div
       className={` flex  flex-col justify-center items-center  h-full w-fit`}
     >
       <div className="relative flex flex-col ">
-        <div className="bg-gradient-radial from-slate-950/70 via-transparent to-transparent w-full h-20 absolute -bottom-8 z-10" />
+        {sprites?.other?.home?.front_default && (
+          <div className="bg-gradient-radial from-slate-950/70 via-transparent to-transparent w-full h-20 absolute -bottom-8 z-10" />
+        )}
 
         {sprites?.other?.home?.front_default ? (
           <Image
@@ -52,15 +55,25 @@ interface PokeTypeProps {
 
 export default function ViewPokemon({ params: { id } }: any) {
   const router = useRouter();
-  const { data, error, isLoading } = useSWR(
+  const { data: info } = useSWR(
     [
       // `https://pokeapi.co/api/v2/pokemon-species/${id}/`,
       `https://pokeapi.co/api/v2/pokemon/${id}/`,
     ],
     fetcher
   );
-
-  const { name, stats, types } = data ?? {};
+  // const { data: poke } = useSWR(
+  //   [
+  //     // `https://pokeapi.co/api/v2/pokemon-species/${id}/`,
+  //     `https://pokeapi.co/api/v2/evolution-chain/1`,
+  //   ],
+  //   fetcher
+  // );
+  // console.log(
+  //   "🚀 ~ file: page.tsx:72 ~ ViewPokemon ~ pokasdqweqweqweqwe:",
+  //   poke
+  // );
+  const { name, stats, types } = info ?? {};
 
   return (
     <div
@@ -84,7 +97,7 @@ export default function ViewPokemon({ params: { id } }: any) {
 
         <div className="flex flex-col gap-2 md:flex-row w-full">
           <div className="flex flex-col gap-5 w-full justify-center items-center">
-            <PokemonImage {...data} />
+            <PokemonImage {...info} />
           </div>
           <div className="w-full flex flex-col gap-3 rounded-t-3xl p-5 md:p-0 bg-white md:bg-transparent">
             <div className="text-xl text-gray-600 md:text-white font-semibold">
@@ -129,11 +142,11 @@ export default function ViewPokemon({ params: { id } }: any) {
                         className={` ${checkTypes(
                           types?.length >= 0 && types[0]?.type?.name
                         )} rounded-full h-full px-2 shadow-lg flex flex-row gap-2 border-2 text-white`}
-                        style={{ width: `${base_stat / 2}%` }}
+                        style={{ width: `${base_stat / 3}%` }}
                       ></div>
                     </div>
                     <div className="col-span-3 text-gray-700 text-sm">
-                      {base_stat}/250
+                      {base_stat}/300
                     </div>
                   </div>
                 );

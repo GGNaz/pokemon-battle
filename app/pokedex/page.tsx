@@ -38,6 +38,7 @@ interface SeletedTabProps {
 
 const Card = ({ name, url, setShowLoading }: CardProps) => {
   const { data, error, isLoading } = useSWR(url, fetcher);
+  console.log("🚀 ~ file: page.tsx:41 ~ Card ~ data:", data);
 
   const [selectedTab, setSelectedtab] = useState<SeletedTabProps>({
     showLabel: "info",
@@ -56,12 +57,12 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
   return (
     <div
       key={name}
-      className={` relative shadow-lg   flex rounded-xl  overflow-hidden w-full  cursor-pointer ${checkTypes(
+      className={` relative shadow-lg h-full  flex rounded-xl  overflow-hidden w-full  cursor-pointer ${checkTypes(
         pokeTypeName
       )}`}
     >
       <div className=" h-full flex flex-col justify-center w-full">
-        <div className="  grid grid-cols-3 gap-2 p-2">
+        <div className="  grid grid-cols-3 gap-2 p-2 relative">
           {types?.map(({ type }: any, index: number) => {
             return (
               // <div className="grid grid-cols-12 " key={index}>
@@ -82,7 +83,7 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
               // </div>
 
               <div
-                className={`flex flex-row gap-1  justify-center items-center  ${checkTypes(
+                className={`flex flex-row gap-1 h-fit justify-center items-center  ${checkTypes(
                   type?.name
                 )} rounded-full border p-1`}
                 key={index}
@@ -100,6 +101,9 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
               </div>
             );
           })}
+          <div className="text-right absolute top-1 right-2 font-extrabold text-xl text-white">
+            #{id}
+          </div>
         </div>
 
         <Link
@@ -207,6 +211,7 @@ const Pokedex = () => {
 
   const [searchPoke, setSearchPoke] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+
   const searchParams = useSearchParams();
   const query = searchParams.get("search");
   const [filteredPoke, setFilteredPoke] = useState([]);
@@ -215,6 +220,7 @@ const Pokedex = () => {
     `https://pokeapi.co/api/v2/type/${query}`,
     fetcher
   );
+  console.log("🚀 ~ file: page.tsx:220 ~ Pokedex ~ data:", data);
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -226,6 +232,7 @@ const Pokedex = () => {
     } else {
       setFilteredPoke(data?.pokemon);
     }
+    setCurrentPage(1);
   }, [searchPoke, data]);
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -251,7 +258,6 @@ const Pokedex = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredPoke?.slice(indexOfFirstItem, indexOfLastItem);
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -276,6 +282,10 @@ const Pokedex = () => {
         currentPage + middlePage
       );
     }
+  };
+
+  const showPokeList = () => {
+    return filteredPoke?.slice(indexOfFirstItem, indexOfLastItem);
   };
 
   return (
@@ -335,7 +345,7 @@ const Pokedex = () => {
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 ">
-              {currentItems?.map(({ pokemon }: any, index: number) => (
+              {showPokeList()?.map(({ pokemon }: any, index: number) => (
                 <div key={index} className="col-span-1">
                   <Card {...pokemon} setShowLoading={setShowLoading} />
                 </div>
