@@ -210,17 +210,14 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
 };
 
 const Pokedex = () => {
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  console.log("🚀 ~ file: page.tsx:214 ~ Pokedex ~ windowWidth:", windowWidth);
+  const [windowWidth, setWindowWidth] = useState(window?.innerWidth ?? 0);
+
   const [searchPoke, setSearchPoke] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const searchParams = useSearchParams();
   const query = searchParams.get("search");
   const [filteredPoke, setFilteredPoke] = useState([]);
-  console.log(
-    "🚀 ~ file: page.tsx:211 ~ Pokedex ~ filteredPoke:",
-    filteredPoke
-  );
+
   const { data, error, isLoading } = useSWR(
     `https://pokeapi.co/api/v2/type/${query}`,
     fetcher
