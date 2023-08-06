@@ -12,12 +12,7 @@ const fetcher = (url: string) =>
   fetch(url, { next: { revalidate: 60 } }).then((res) => res.json());
 
 const PokemonImage = (data: any) => {
-  // const { data, error, isLoading } = useSWR(
-  //   `https://pokeapi.co/api/v2/pokemon/${id}/`,
-  //   fetcher
-  // );
   const { sprites, types } = data ?? {};
-  console.log("🚀 ~ file: page.tsx:20 ~ PokemonImage ~ sprites:", sprites);
 
   return (
     <div
@@ -62,17 +57,7 @@ export default function ViewPokemon({ params: { id } }: any) {
     ],
     fetcher
   );
-  // const { data: poke } = useSWR(
-  //   [
-  //     // `https://pokeapi.co/api/v2/pokemon-species/${id}/`,
-  //     `https://pokeapi.co/api/v2/evolution-chain/1`,
-  //   ],
-  //   fetcher
-  // );
-  // console.log(
-  //   "🚀 ~ file: page.tsx:72 ~ ViewPokemon ~ pokasdqweqweqweqwe:",
-  //   poke
-  // );
+
   const { name, stats, types } = info ?? {};
 
   return (
@@ -155,8 +140,6 @@ export default function ViewPokemon({ params: { id } }: any) {
           </div>
         </div>
       </div>
-      {/* <div className="basis-2/6 p-10">sdasd</div> */}
     </div>
   );
-  // <div className="h-screen flex flex-row w-full bg-red-200">
 }

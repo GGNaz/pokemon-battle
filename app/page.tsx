@@ -82,7 +82,7 @@ export default function Home() {
     `https://pokeapi.co/api/v2/pokemon/?limit=10000`,
     fetcher
   );
-  console.log("🚀 ~ file: page.tsx:82 ~ Home ~ data:", data);
+
   const [filteredPoke, setFileredPoke] = useState([]);
   interface CardProps {
     name: string;

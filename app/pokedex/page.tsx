@@ -4,7 +4,6 @@ import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
 import Lottie from "lottie-react";
 import * as MdIcons from "react-icons/md";
 import * as BsIcon from "react-icons/bs";
-// import { checkTypes } from "@/utils/BgColorPokeType";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -38,7 +37,6 @@ interface SeletedTabProps {
 
 const Card = ({ name, url, setShowLoading }: CardProps) => {
   const { data, error, isLoading } = useSWR(url, fetcher);
-  console.log("🚀 ~ file: page.tsx:41 ~ Card ~ data:", data);
 
   const [selectedTab, setSelectedtab] = useState<SeletedTabProps>({
     showLabel: "info",
@@ -65,23 +63,6 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
         <div className="  grid grid-cols-3 gap-2 p-2 relative">
           {types?.map(({ type }: any, index: number) => {
             return (
-              // <div className="grid grid-cols-12 " key={index}>
-              //   <div className="col-span-4">
-              //     {checkStats(stat)?.toUpperCase()}
-              //   </div>
-
-              //   <div className="col-span-8 bg-gray-200 w-full rounded-full">
-              //     <div
-              //       className={` ${checkTypes(
-              //         pokeTypeName
-              //       )} rounded-full h-full text-black px-2 shadow-lg`}
-              //       style={{ width: `${base_stat / 2}%` }}
-              //     >
-              //       {base_stat}
-              //     </div>
-              //   </div>
-              // </div>
-
               <div
                 className={`flex flex-row gap-1 h-fit justify-center items-center  ${checkTypes(
                   type?.name
@@ -125,65 +106,11 @@ const Card = ({ name, url, setShowLoading }: CardProps) => {
             </div>
           )}
 
-          {/* <Image
-            src={checkIconType(pokeTypeName)}
-            alt={pokeTypeName}
-            height={100}
-            width={100}
-            className={`h-36 w-36 absolute  text-red-500 z-10`}
-          /> */}
           <MdIcons.MdOutlineCatchingPokemon
             className={`h-56 w-56 -rotate-12 absolute text-white/20 z-10`}
           />
         </Link>
         <div className="bg-white shadow-xl w-full h-full flex flex-col rounded-t-2xl p-5 gap-2">
-          {/* <div className="grid grid-cols-2 text-xs items-center bg-gray-100 rounded-full z-30">
-            <div
-              className={`${
-                selectedTab.showLabel === "info"
-                  ? checkTypes(pokeTypeName) + " text-white"
-                  : ""
-              } text-center rounded-full p-1 `}
-              onClick={() => tabShown("info", id)}
-            >
-              Type
-            </div>
-
-            <div
-              className={`${
-                selectedTab?.id === id && selectedTab.showLabel === "abilities"
-                  ? checkTypes(pokeTypeName) + " text-white"
-                  : ""
-              } text-center rounded-full p-1 text-black`}
-              onClick={() => tabShown("abilities", id)}
-            >
-              Abilities
-            </div>
-          </div>
-          {selectedTab?.id === id && selectedTab.showLabel === "abilities" ? (
-            <div className=" flex flex-col gap-2">
-              {abilities?.map(({ ability }: any, index: number) => {
-                return (
-                  <div
-                    key={index}
-                    className={`flex flex-row rounded-full capitalize p-2 bg-gray-100 text-xs`}
-                  >
-                    <div>{ability?.name}</div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            
-          )} */}
-
-          {/* <div className="flex flex-row gap-1 text-sm bg-white">
-            {types?.map(({ type }: any, index: number) => (
-              <div className={`${checkTypes(type?.name)}`} key={index}>
-                {type?.name?.toUpperCase()}
-              </div>
-            ))}
-          </div> */}
           <div className="capitalize font-extrabold text-gray-600 text-xl text-center">
             {" "}
             {name}
@@ -220,7 +147,7 @@ const Pokedex = () => {
     `https://pokeapi.co/api/v2/type/${query}`,
     fetcher
   );
-  console.log("🚀 ~ file: page.tsx:220 ~ Pokedex ~ data:", data);
+
   const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -295,8 +222,8 @@ const Pokedex = () => {
           <HOCLoading />
         </div>
       )}
-      <div className=" w-full h-screen max-w-6xl flex flex-col gap-2 p-2 lg:p-0">
-        <div className=" w-full h-full flex flex-row gap-4 items-start lg:items-center justify-start lg:justify-center">
+      <div className=" w-full h-screen max-w-6xl flex flex-col gap-2">
+        <div className=" w-full h-full flex flex-row gap-4 p-2 justify-start lg:justify-center">
           {/* {filteredPoke?.length > 0 && ( */}
           <div
             className={`flex flex-col h-full justify-center ${
@@ -366,27 +293,8 @@ const Pokedex = () => {
                 Fetching Pokemon, please wait...
               </div>
             )}
-            {/* <div className=" flex justify-center items-center gap-2">
-              {filteredPoke?.length > 0 &&
-                pageNumbers.map((data) => (
-                  <button
-                    className={`
-                   ${
-                     currentPage === data
-                       ? `text-white transition-all duration-150  scale-105 font-bold ${checkTypes(
-                           query ?? "default"
-                         )}`
-                       : "hover:font-semibold"
-                   }
-                   p-2 rounded-full w-8 h-8 text-xs `}
-                    onClick={() => handlePageChange(data)}
-                    key={data}
-                  >
-                    {data}
-                  </button>
-                ))}
-            </div> */}
-            <div className=" flex justify-center items-center gap-2">
+
+            <div className=" flex justify-center items-center gap-0 md:gap-2">
               {getPageRange()?.length > 0 &&
                 getPageRange()?.map((data) => (
                   <button
@@ -407,7 +315,7 @@ const Pokedex = () => {
                 ))}
             </div>
           </div>
-          {/* {filteredPoke?.length > 0 && ( */}
+
           <div
             className={`flex flex-col h-full justify-center ${
               filteredPoke?.length > 0 ? "visible" : "invisible"
